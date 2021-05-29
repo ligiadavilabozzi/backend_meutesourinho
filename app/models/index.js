@@ -33,6 +33,8 @@ db.sequelize = sequelize;
 //vamos carregar os relacionamentos, pq a model só vai representar o modelo do banco de dados 
 db.user = require("../models/user.model")(sequelize, Sequelize);
 db.role = require("../models/role.model")(sequelize, Sequelize);
+db.transaction = require('../models/transaction.model')(sequelize, Sequelize);
+
 //estamos chamando o db e dando um import no user e no role e passamos as propriedades do sequelize.   
 
 //RELACIONAMENTOS: 
@@ -46,9 +48,21 @@ db.user.belongsToMany(db.role, {
     through: "user_roles",
     foreignKey: "userId",
     otherKey: "roleId"
-}); // pq no user foi o role, estamos relacionando essa com a de cima ^
+}); 
+
+db.user.belongsToMany(db.transaction,{
+    through: "user_transactions",
+    foreignKey: "userId"
+} );
+
+db.transaction.belongsToMany(db.user,{
+    through: "user_transactions", 
+    foreignKey: "transactionId"
+} );
+
 
 //vamos exportar as roles que temos 
 db.ROLES= ["user", "admin", "moderator"]
+db.TRANSATIONS=[[1,2],[50,100],[20,500]]
 
 module.exports = db

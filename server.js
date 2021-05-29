@@ -24,7 +24,8 @@ app.use(express.urlencoded({extended:true}));
 
 //Chamar o banco de dados que exportamos: 
 const db = require("./app/models") //vamos trazer só as pastas pq vaos trazer tudo o que tem nelas
-const Role = db.role;               
+const Role = db.role;           
+const Transaction = db.transaction;    
 
 db.sequelize.sync({force:true}).then(()=>{ //é uma promisse vai esperar o primeiro para depois executar o segundo 
     console.log("Dopando e syncandoo banco"); 
@@ -44,7 +45,21 @@ function initial() {
     Role.create({
         id:3, 
         name: "admin"
-    })
+    });
+    Transaction.create({
+        id:1,
+        level: 1, 
+        income: 50.00,
+        outcome: 20.00,
+    }); 
+    Transaction.create({
+        id:2,
+        level: 2, 
+        income: 100.00,
+        outcome: 30.00,
+    }); 
+    
+
 };
 
 
